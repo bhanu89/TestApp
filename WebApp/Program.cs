@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using WebApp.Services.Forecast;
 using WebApp.Settings;
 
@@ -8,6 +9,13 @@ builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection(ApiSettings.Section));
 
 builder.Services.AddTransient<IForecastService, ForecastService>();
+
+
+builder.Services.AddHttpClient("", (services, client) =>
+{
+    var settings = services.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(settings.Url);
+});
 
 builder.Services.AddRazorPages();
 

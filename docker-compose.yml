@@ -1,18 +1,15 @@
-services:
-  Api:
-    container_name: Api
-    build:
-        context: .
-        dockerfile: Api/Dockerfile
-    ports:
-      - "43695:80"
+version: '3.4'
 
-  WebApp:
-    container_name: WebApp
+services:
+  webapp:
+    image: ${DOCKER_REGISTRY-}webapp
     build:
-        context: .
-        dockerfile: WebApp/Dockerfile
-    ports:
-      - "56088:80"
-    extra_hosts:
-      - "localhost:172.17.0.3"
+      context: .
+      dockerfile: WebApp/Dockerfile
+
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+
