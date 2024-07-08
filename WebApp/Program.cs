@@ -8,14 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection(ApiSettings.Section));
 
-builder.Services.AddTransient<IForecastService, ForecastService>();
-
-
-builder.Services.AddHttpClient("", (services, client) =>
+// Register HttpClient with Base Address from configuration
+builder.Services.AddHttpClient(Options.DefaultName, (serviceProvider, client) =>
 {
-    var settings = services.GetRequiredService<IOptions<ApiSettings>>().Value;
-    client.BaseAddress = new Uri(settings.Url);
+    var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
+    client.BaseAddress = new Uri(apiSettings.Url);
 });
+
+builder.Services.AddTransient<IForecastService, ForecastService>();
 
 builder.Services.AddRazorPages();
 
